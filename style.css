@@ -15,7 +15,7 @@ body {
 }
 
 header {
-    background-color: #4a90e2;
+    background-color: #e24a4a;
     color: #fff;
     padding: 1.5rem;
     text-align: center;
@@ -51,7 +51,7 @@ main {
 
 main h2 {
     font-size: 1.6rem;
-    color: #4a90e2;
+    color: #e24a4a;
     margin-bottom: 1rem;
 }
 
@@ -72,4 +72,39 @@ footer {
 
 footer p {
     margin: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #e24a4a;
+    color: white;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #e1f5fe;
+}
+
+caption {
+    caption-side: top;
+    font-size: 1.5rem;
+    color: #e24a4a;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
 }

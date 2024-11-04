@@ -10,9 +10,9 @@
     <header>
       <h1>Bienvenue dans Ma Collection de Films</h1>
       <nav>
-        <a href="#">Accueil</a>
+        <a href="page.php">Accueil</a>
+        <a href="liste_films.php">Liste des Films</a>
         <a href="#">Ajouter un Film</a>
-        <a href="#">Liste des Films</a>
         <a href="#">Contact</a>
       </nav>
     </header>
