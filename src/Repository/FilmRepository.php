@@ -52,4 +52,45 @@ class FilmRepository
         // Utilise le service de mappage pour convertir le résultat en objet Film
         return $this->entityMapperService->mapToEntity($film, Film::class);
     }
+
+    public function createFilm(Film $film): void
+    {
+        $sql = "INSERT INTO film (title, year, type, synopsis, director, created_at, updated_at) 
+                VALUES (:title, :year, :type, :synopsis, :director, :createdAt, :updatedAt)";
+        
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->bindValue(':title', $film->getTitle());
+        $stmt->bindValue(':year', $film->getYear());
+        $stmt->bindValue(':type', $film->getType());
+        $stmt->bindValue(':synopsis', $film->getSynopsis());
+        $stmt->bindValue(':director', $film->getDirector());
+        $stmt->bindValue(':createdAt', $film->getCreatedAt()->format('Y-m-d H:i:s'));
+        $stmt->bindValue(':updatedAt', $film->getUpdatedAt() ? $film->getUpdatedAt()->format('Y-m-d H:i:s') : null);
+
+        $stmt->execute();
+    }
+
+    public function deleteFilm(Film $film): void
+    {
+        $stmt = $this->db->prepare('DELETE FROM film WHERE id = :id');
+        $stmt->execute(['id' => $film->getId()]);
+    }
+
+        public function updateFilm(Film $film): void
+    {
+        $sql = "UPDATE film SET title = :title, year = :year, type = :type, synopsis = :synopsis, director = :director, updated_at = :updatedAt WHERE id = :id";
+        
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->bindValue(':title', $film->getTitle());
+        $stmt->bindValue(':year', $film->getYear());
+        $stmt->bindValue(':type', $film->getType());
+        $stmt->bindValue(':synopsis', $film->getSynopsis());
+        $stmt->bindValue(':director', $film->getDirector());
+        $stmt->bindValue(':updatedAt', $film->getUpdatedAt() ? $film->getUpdatedAt()->format('Y-m-d H:i:s') : null);
+        $stmt->bindValue(':id', $film->getId());
+
+        $stmt->execute();
+    }
 }

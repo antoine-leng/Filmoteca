@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un film{% endblock %}
+
+{% block content %}
+    <h2 class="mb-4">Modifier un film</h2>
+
+    <form action="/film/update?id={{ film.id }}" method="post">
+        <div class="form-group">
+            <label for="title">Titre</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ film.title }}" required>
+        </div>
+        <div class="form-group">
+            <label for="year">Année</label>
+            <input type="text" class="form-control" id="year" name="year" value="{{ film.year }}">
+        </div>
+        <div class="form-group">
+            <label for="type">Type</label>
+            <input type="text" class="form-control" id="type" name="type" value="{{ film.type }}" required>
+        </div>
+        <div class="form-group">
+            <label for="synopsis">Synopsis</label>
+            <textarea class="form-control" id="synopsis" name="synopsis">{{ film.synopsis }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="director">Réalisateur</label>
+            <input type="text" class="form-control" id="director" name="director" value="{{ film.director }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </form>
+{% endblock %}

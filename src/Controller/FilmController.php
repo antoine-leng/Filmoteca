@@ -49,24 +49,74 @@ class FilmController
 
     public function create()
     {
-        echo "Création d'un film";
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $film = $this->entityMapper->mapToEntity($_POST, Film::class);
+            $film->setCreatedAt(new \DateTime());
+
+            $filmRepository = new FilmRepository();
+            $filmRepository->createFilm($film);
+
+            header('Location: /film/list');
+            exit();
+        }
+
+        echo $this->renderer->render('film/create.html.twig');
     }
+
+    
+    
 
     public function read(array $queryParams)
     {
         $filmRepository = new FilmRepository();
         $film = $filmRepository->find((int) $queryParams['id']);
 
-        dd($film);
+        if ($film) {
+            echo $this->renderer->render('film/read.html.twig', [
+                'film' => $film,
+            ]);
+        } else {
+            echo "Film not found";
+        }
     }
 
-    public function update()
+    public function update(array $queryParams)
     {
-        echo "Mise à jour d'un film";
+        $filmRepository = new FilmRepository();
+        $film = $filmRepository->find((int) $queryParams['id']);
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $updatedFilm = $this->entityMapper->mapToEntity($_POST, Film::class);
+            $updatedFilm->setId($film->getId());
+            $updatedFilm->setUpdatedAt(new \DateTime());
+
+            $filmRepository->updateFilm($updatedFilm);
+
+            header('Location: /film/list');
+            exit();
+        }
+
+        echo $this->renderer->render('film/update.html.twig', [
+            'film' => $film,
+        ]);
     }
 
-    public function delete()
+    public function delete(array $queryParams)
     {
-        echo "Suppression d'un film";
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $filmRepository = new FilmRepository();
+            $film = $filmRepository->find((int) $queryParams['id']);
+
+            if ($film) {
+                $filmRepository->deleteFilm($film);
+                header('Location: /film/list');
+                exit();
+            } else {
+                echo "Film not found";
+            }
+        } else {
+            header('Location: /film/list');
+            exit();
+        }
     }
 }
