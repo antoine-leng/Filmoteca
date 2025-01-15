@@ -7,14 +7,18 @@ namespace App\Controller;
 use App\Core\TemplateRenderer;
 use App\Entity\Film;
 use App\Repository\FilmRepository;
+use App\Service\EntityMapper;
 
 class FilmController
 {
     private TemplateRenderer $renderer;
+    private EntityMapper $entityMapper;
 
     public function __construct()
     {
         $this->renderer = new TemplateRenderer();
+        $this->entityMapper = new EntityMapper();
+        session_start();
     }
 
     public function list(array $queryParams)
@@ -22,29 +26,9 @@ class FilmController
         $filmRepository = new FilmRepository();
         $films = $filmRepository->findAll();
 
-        /* $filmEntities = [];
-        foreach ($films as $film) {
-            $filmEntity = new Film();
-            $filmEntity->setId($film['id']);
-            $filmEntity->setTitle($film['title']);
-            $filmEntity->setYear($film['year']);
-            $filmEntity->setType($film['type']);
-            $filmEntity->setSynopsis($film['synopsis']);
-            $filmEntity->setDirector($film['director']);
-            $filmEntity->setCreatedAt(new \DateTime($film['created_at']));
-            $filmEntity->setUpdatedAt(new \DateTime($film['updated_at']));
-
-            $filmEntities[] = $filmEntity;
-        } */
-
-        //dd($films);
-
         echo $this->renderer->render('film/list.html.twig', [
             'films' => $films,
         ]);
-
-        // header('Content-Type: application/json');
-        // echo json_encode($films);
     }
 
     public function create()
@@ -56,15 +40,13 @@ class FilmController
             $filmRepository = new FilmRepository();
             $filmRepository->createFilm($film);
 
+            $_SESSION['flash_message'] = 'Film créé avec succès.';
             header('Location: /film/list');
             exit();
         }
 
         echo $this->renderer->render('film/create.html.twig');
     }
-
-    
-    
 
     public function read(array $queryParams)
     {
@@ -92,6 +74,7 @@ class FilmController
 
             $filmRepository->updateFilm($updatedFilm);
 
+            $_SESSION['flash_message'] = 'Film modifié avec succès.';
             header('Location: /film/list');
             exit();
         }
@@ -109,6 +92,7 @@ class FilmController
 
             if ($film) {
                 $filmRepository->deleteFilm($film);
+                $_SESSION['flash_message'] = 'Film supprimé avec succès.';
                 header('Location: /film/list');
                 exit();
             } else {
