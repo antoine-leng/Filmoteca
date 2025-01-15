@@ -55,11 +55,21 @@ class FilmRepository
 
     public function createFilm(Film $film): void
     {
-        $sql = "INSERT INTO film (title, year, type, synopsis, director, created_at, updated_at) 
-                VALUES (:title, :year, :type, :synopsis, :director, :createdAt, :updatedAt)";
+        // identifiant maximum actuel
+        $stmt = $this->db->query('SELECT MAX(id) as max_id FROM film');
+        $result = $stmt->fetch();
+        $maxId = $result['max_id'] ?? 0;
+
+        // identifiant du nouveau film
+        $newId = $maxId + 1;
+        $film->setId($newId);
+
+        $sql = "INSERT INTO film (id, title, year, type, synopsis, director, created_at, updated_at) 
+                VALUES (:id, :title, :year, :type, :synopsis, :director, :createdAt, :updatedAt)";
         
         $stmt = $this->db->prepare($sql);
 
+        $stmt->bindValue(':id', $film->getId());
         $stmt->bindValue(':title', $film->getTitle());
         $stmt->bindValue(':year', $film->getYear());
         $stmt->bindValue(':type', $film->getType());
@@ -71,13 +81,13 @@ class FilmRepository
         $stmt->execute();
     }
 
-    public function deleteFilm(Film $film): void
+    public function deleteFilm(int $id): void
     {
         $stmt = $this->db->prepare('DELETE FROM film WHERE id = :id');
-        $stmt->execute(['id' => $film->getId()]);
+        $stmt->execute(['id' => $id]);
     }
 
-        public function updateFilm(Film $film): void
+    public function updateFilm(int $id, Film $film): void
     {
         $sql = "UPDATE film SET title = :title, year = :year, type = :type, synopsis = :synopsis, director = :director, updated_at = :updatedAt WHERE id = :id";
         
@@ -89,7 +99,7 @@ class FilmRepository
         $stmt->bindValue(':synopsis', $film->getSynopsis());
         $stmt->bindValue(':director', $film->getDirector());
         $stmt->bindValue(':updatedAt', $film->getUpdatedAt() ? $film->getUpdatedAt()->format('Y-m-d H:i:s') : null);
-        $stmt->bindValue(':id', $film->getId());
+        $stmt->bindValue(':id', $id);
 
         $stmt->execute();
     }
