@@ -2,20 +2,58 @@
 
 {% block title %}Voir le film{% endblock %}
 
-{% block content %}
-    <h2 class="mb-4">Voir le film</h2>
+{% block stylesheets %}
+    <style>
+        .film-card {
+            margin-top: 20px;
+        }
+        .film-card-header {
+            background-color: #343a40;
+            color: white;
+        }
+        .film-card-body {
+            background-color: #f8f9fa;
+        }
+        .film-card-footer {
+            text-align: center;
+        }
+        .film-card-footer a, .film-card-footer form {
+            margin: 5px;
+        }
+    </style>
+{% endblock %}
 
-    <div class="card">
-        <div class="card-header">
-            <h3>{{ film.title }}</h3>
+{% block content %}
+    <h2 class="mb-4 text-center">
+        <i class="fas fa-film" aria-hidden="true"></i> {{ film.title }}
+    </h2>
+
+    <div class="card film-card">
+        <div class="card-header film-card-header">
+            <h3 class="card-title">{{ film.title }}</h3>
         </div>
-        <div class="card-body">
-            <p><strong>Année :</strong> {{ film.year }}</p>
-            <p><strong>Type :</strong> {{ film.type }}</p>
-            <p><strong>Réalisateur :</strong> {{ film.director }}</p>
-            <p><strong>Synopsis :</strong> {{ film.synopsis }}</p>
-            <p><strong>Ajouté le :</strong> {{ film.createdAt.format('d/m/Y H:i') }}</p>
-            <p><strong>Modifié le :</strong> {{ film.updatedAt.format('d/m/Y H:i') }}</p>
+        <div class="card-body film-card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Année :</strong> {{ film.year }}</p>
+                    <p><strong>Type :</strong> {{ film.type }}</p>
+                    <p><strong>Réalisateur :</strong> {{ film.director }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Ajouté le :</strong> {{ film.createdAt.format('d/m/Y H:i') }}</p>
+                    <p><strong>Modifié le :</strong> {{ film.updatedAt.format('d/m/Y H:i') }}</p>
+                </div>
+            </div>
+            <hr>
+            <h4>Synopsis</h4>
+            <p>{{ film.synopsis }}</p>
+        </div>
+        <div class="card-footer film-card-footer">
+            <a href="/film/list" class="btn btn-secondary">Retour à la liste</a>
+            <a href="/film/update?id={{ film.id }}" class="btn btn-primary">Modifier</a>
+            <form action="/film/delete?id={{ film.id }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce film ?');">
+                <button type="submit" class="btn btn-danger">Supprimer</button>
+            </form>
         </div>
     </div>
 {% endblock %}

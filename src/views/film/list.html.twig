@@ -2,15 +2,47 @@
 
 {% block title %}Liste des films{% endblock %}
 
+{% block stylesheets %}
+    <style>
+        .film-table {
+            margin-top: 20px;
+        }
+        .film-table th, .film-table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .film-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .film-actions form {
+            display: inline;
+        }
+        .btn-custom-view {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .btn-custom-update {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-custom-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-    <h2 class="mb-4">
+    <h2 class="mb-4 text-center">
         <i class="fas fa-list" aria-hidden="true"></i> Liste des films
     </h2>
 
     {% if films is empty %}
-        <p class="alert alert-warning">Aucun film disponible pour le moment.</p>
+        <p class="alert alert-warning text-center">Aucun film disponible pour le moment.</p>
     {% else %}
-        <table class="table table-bordered table-hover table-striped">
+        <table class="table table-bordered table-hover table-striped film-table">
             <thead class="table-dark">
                 <tr>
                     <th>#</th>
@@ -36,11 +68,11 @@
                         <td>{{ film.synopsis }}</td>
                         <td>{{ film.createdAt.format('d/m/Y H:i') }}</td>
                         <td>{{ film.updatedAt.format('d/m/Y H:i') }}</td>
-                        <td>
-                            <a href="/film/read?id={{ film.id }}" class="btn btn-info">Voir</a>
-                            <a href="/film/update?id={{ film.id }}" class="btn btn-primary">Modifier</a>
-                            <form action="/film/delete?id={{ film.id }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce film ?');">
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                        <td class="film-actions">
+                            <a href="/film/read?id={{ film.id }}" class="btn btn-custom-view">Voir</a>
+                            <a href="/film/update?id={{ film.id }}" class="btn btn-custom-update">Modifier</a>
+                            <form action="/film/delete?id={{ film.id }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce film ?');">
+                                <button type="submit" class="btn btn-custom-delete">Supprimer</button>
                             </form>
                         </td>
                     </tr>

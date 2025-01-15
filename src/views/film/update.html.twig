@@ -2,10 +2,26 @@
 
 {% block title %}Modifier un film{% endblock %}
 
-{% block content %}
-    <h2 class="mb-4">Modifier un film</h2>
+{% block stylesheets %}
+    <style>
+        .update-form {
+            margin-top: 20px;
+        }
+        .update-form .form-group {
+            margin-bottom: 15px;
+        }
+        .update-form .btn {
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}
 
-    <form action="/film/update?id={{ film.id }}" method="post">
+{% block content %}
+    <h2 class="mb-4 text-center">
+        <i class="fas fa-edit" aria-hidden="true"></i> Modifier un film
+    </h2>
+
+    <form action="/film/update?id={{ film.id }}" method="post" class="update-form">
         <div class="form-group">
             <label for="title">Titre</label>
             <input type="text" class="form-control" id="title" name="title" value="{{ film.title }}" required>
@@ -26,6 +42,9 @@
             <label for="director">Réalisateur</label>
             <input type="text" class="form-control" id="director" name="director" value="{{ film.director }}">
         </div>
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="/film/list" class="btn btn-secondary">Annuler</a>
+        </div>
     </form>
 {% endblock %}
